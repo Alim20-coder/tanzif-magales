@@ -66,6 +66,11 @@ section h2{font-weight:900;color:var(--n);font-size:clamp(1.6rem,4vw,2.5rem)}.dk
 .g-i img,.g-i video{width:100%;height:100%;object-fit:cover;transition:.6s}.g-i:hover img,.g-i:hover video{transform:scale(1.15) rotate(1.5deg)}
 .ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,18,51,.88),transparent 65%);display:flex;align-items:center;justify-content:center;opacity:0;transition:.4s;color:var(--g);font-size:3rem}.g-i:hover .ov{opacity:1}
 .bd{position:absolute;top:10px;right:10px;background:var(--g);color:var(--n);border-radius:50px;padding:1px 12px;font-size:.78rem;font-weight:800}
+.vc{background:#fff;border:3px solid #d8353a;border-radius:20px;overflow:hidden;box-shadow:0 10px 25px #0006}
+.vc.a{border-color:var(--t)}
+.vc .lb{padding:7px 4px;text-align:center;font-weight:800;color:#fff;background:#d8353a}
+.vc.a .lb{background:var(--t);color:var(--n)}
+.vc .g-i{border-radius:0;box-shadow:none}
 .ar{display:flex;align-items:center;gap:10px;background:#fff;padding:16px 22px;border-radius:50px;font-weight:800;color:var(--n);box-shadow:0 8px 22px #0a12331a;transition:.4s}
 .ar i{color:var(--g)}.ar:hover{background:linear-gradient(135deg,var(--g),var(--g2));transform:translateY(-6px) scale(1.04)}.ar:hover i{color:var(--n)}
 .accordion-item{border:0;border-radius:14px!important;overflow:hidden;margin-bottom:12px;box-shadow:0 6px 18px #0a12331a}
@@ -196,8 +201,11 @@ $('#fs').innerHTML=L(S,s=>`<option>${s[0]}</option>`);
 $('#fb2').onclick=()=>open(W+encodeURIComponent(`مرحباً، أنا ${$('#fn').value} وأرغب بخدمة ${$('#fs').value}`),'_blank');
 
 /* المعرض: صور*/
-const G=[...Array(29)].map((_,i)=>['i',i+1]).concat([...Array(11)].map((_,i)=>['v',i+1]));
+const G=[...Array(29)].map((_,i)=>['i',i+1]);
 $('#gg').innerHTML=L(G,([t,n])=>`<div class="col-6 col-md-4 col-lg-3 gc" data-t="${t}"><div class="g-i" data-t="${t}" data-k="${n}">${t=='i'?`<img src="css/${n}.jpg" alt="تنظيف مجالس وكنب بالقصيم - صورة ${n}" loading="lazy">`:`<video src="css/v (${n}).mp4#t=0.8" muted preload="metadata" playsinline></video>`}<span class="bd">${t=='i'?'صورة':'فيديو'}</span><div class="ov"><i class="bi ${t=='i'?'bi-zoom-in':'bi-play-circle-fill'}"></i></div></div></div>`);
+/* فيديوهات قبل/بعد: الزوجي (2،4،6،8) = قبل — الفردي (1،3،5،7) = بعد */
+const vc=(n,b)=>`<div class="col-6 col-md-4 col-lg-3"><div class="vc${b?'':' a'}"><div class="lb">${b?'قبل التنظيف':'بعد التنظيف'}</div><div class="g-i" data-t="v" data-k="${n}"><video src="css/v (${n}).mp4#t=0.8" muted preload="metadata" playsinline></video><div class="ov"><i class="bi bi-play-circle-fill"></i></div></div></div></div>`;
+$('#gg').insertAdjacentHTML('afterbegin',L([1,3,5,7],n=>`<div class="col-12 gc" data-t="v"><div class="row g-3 justify-content-center">${vc(n+1,1)}${vc(n,0)}</div></div>`));
 $('#flt').onclick=e=>{const b=e.target.closest('.fb');if(!b)return;document.querySelectorAll('.fb').forEach(x=>x.classList.toggle('on',x==b));document.querySelectorAll('.gc').forEach(c=>{const s=b.dataset.f=='all'||c.dataset.t==b.dataset.f;c.style.display=s?'':'none';if(s){c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop')}})};
 const M=new bootstrap.Modal('#mm');
 $('#gg').onclick=e=>{const g=e.target.closest('.g-i');if(!g)return;const k=g.dataset.k;$('#mb').innerHTML=g.dataset.t=='v'?`<video src="css/v (${k}).mp4" controls autoplay playsinline class="mw-100 rounded-4" style="max-height:80vh"></video>`:`<img src="css/${k}.jpg" alt="أعمالنا" class="mw-100 rounded-4" style="max-height:80vh">`;M.show()};
